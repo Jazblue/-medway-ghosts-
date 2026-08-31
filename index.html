@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Medway Ghosts — Paranormal Investigations</title>
+<style>
+  :root { --bg:#0b0d14; --card:#12151f; --text:#e6e8ef; --muted:#a8aab5; --accent:#c9302c; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+  a { color:#ff6b6b; }
+  header { padding:60px 20px 40px; text-align:center; border-bottom:1px solid #1f2330; }
+  header h1 { margin:0; font-size:clamp(32px,5vw,56px); letter-spacing:1px; }
+  header p { color:var(--muted); margin-top:8px; }
+  .wrap { max-width:960px; margin:0 auto; padding:40px 20px; }
+  .grid { display:grid; gap:24px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
+  .card { background:var(--card); border:1px solid #1f2330; border-radius:16px; padding:22px; transition:transform .15s ease, box-shadow .15s ease; }
+  .card:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.35); }
+  .card h3 { margin:0 0 8px; font-size:20px; color:#ff8a8a; }
+  .card p { margin:0; color:var(--muted); }
+  .meta { color:#73768a; font-size:13px; margin-top:10px; }
+  footer { text-align:center; padding:40px 20px; color:#5f6275; font-size:13px; border-top:1px solid #1f2330; margin-top:40px; }
+  .btn { display:inline-block; padding:12px 18px; border-radius:10px; background:#1f2330; color:#ff8a8a; text-decoration:none; font-weight:600; border:1px solid #2a2e3d; }
+  .topnav { display:flex; gap:14px; justify-content:center; padding:14px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>MEDWAY GHOSTS</h1>
+  <p>Paranormal investigations across the Medway towns — Rochester, Chatham, Gillingham, and beyond.</p>
+  <div class="topnav">
+    <a class="btn" href="#stories">Stories</a>
+    <a class="btn" href="#locations">Locations</a>
+    <a class="btn" href="#submit">Submit a sighting</a>
+  </div>
+</header>
+<div class="wrap">
+  <section id="stories">
+    <h2>Recent Encounters</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>The Watchman of Rochester Castle</h3>
+        <p>Night staff report footsteps on the keep stairs after closing, with no visible source. Temperature drops noted near the east tower.</p>
+        <div class="meta">Rochester Castle • Last updated Aug 2026</div>
+      </article>
+      <article class="card">
+        <h3>Phantom Drummer of the Great Lines</h3>
+        <p>Visitors on Chatham’s Great Lines have reported hearing faint drumming late at night, echoing historic military parades.</p>
+        <div class="meta">Great Lines, Chatham • Summer 2026</div>
+      </article>
+      <article class="card">
+        <h3>Gillingham Station Apparition</h3>
+        <p>A figure in period clothing has been seen standing on platform 2 shortly before the last train, vanishing when approached.</p>
+        <div class="meta">Gillingham Railway Station • Ongoing reports</div>
+      </article>
+    </div>
+  </section>
+
+  <section id="locations" style="margin-top:40px;">
+    <h2>Key Locations</h2>
+    <div class="grid">
+      <article class="card">
+        <h3>Rochester Castle & Cathedral</h3>
+        <p>Norman keep, siege tunnels, and medieval precinct. High concentration of cold-spot reports and unexplained sounds.</p>
+      </article>
+      <article class="card">
+        <h3>Great Lines Chatham</h3>
+        <p>Former military parade grounds. Oral histories cite phantom marching and lights seen on the ramparts.</p>
+      </article>
+      <article class="card">
+        <h3>Gillingham & the Medway River</h3>
+        <p>Historic dockside and riverside paths associated with Victorian-era apparitions and disembodied voices.</p>
+      </article>
+    </div>
+  </section>
+
+  <section id="submit" style="margin-top:40px;">
+    <h2>Submit a Sighting</h2>
+    <p>Have you experienced something unexplained in the Medway area? Email details to <a href="mailto:jasonmariakieran@gmail.com">jasonmariakieran@gmail.com</a>.</p>
+  </section>
+</div>
+<footer>
+  Built by CloudHermes for Jason Harvey • Medway Ghosts • 2026
+</footer>
+</body>
+</html>
