@@ -7,33 +7,33 @@
 <style>
   :root { --bg:#0b0d14; --card:#12151f; --text:#e6e8ef; --muted:#a8aab5; --accent:#c9302c; --glow:#ff6b6b55; }
   * { box-sizing: border-box; }
-  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
   a { color:#ff6b6b; text-decoration:none; }
   header { padding:70px 20px 50px; text-align:center; border-bottom:1px solid #1f2330; background:radial-gradient(ellipse at center,#1a1424 0%,#0b0d14 70%); position:relative; overflow:hidden; }
   header::before { content:'👻 🎃 👻 🎃 👻'; position:absolute; top:18px; left:0; right:0; text-align:center; font-size:22px; opacity:.35; letter-spacing:12px; }
   header h1 { margin:0; font-size:clamp(36px,6vw,64px); letter-spacing:2px; text-shadow:0 0 30px var(--glow); }
-  header p { color:var(--muted); margin-top:12px; font-size:18px; max-width:640px; margin-left:auto; margin-right:auto; }
-  .wrap { max-width:1000px; margin:0 auto; padding:50px 20px; }
-  .grid { display:grid; gap:24px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
-  .card { background:var(--card); border:1px solid #1f2330; border-radius:18px; padding:26px; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-  .card:hover { transform:translateY(-3px); box-shadow:0 14px 40px rgba(0,0,0,.5); border-color:#2a2e3d; }
-  .card h3 { margin:0 0 10px; font-size:21px; color:#ff8a8a; display:flex; align-items:center; gap:10px; }
-  .card .icon { font-size:26px; }
-  .card p { margin:0; color:var(--muted); }
-  .meta { color:#73768a; font-size:13px; margin-top:12px; display:flex; align-items:center; gap:8px; }
+  header p { color:var(--muted); margin-top:12px; font-size:18px; max-width:720px; margin-left:auto; margin-right:auto; }
+  .wrap { max-width:900px; margin:0 auto; padding:50px 20px; }
+  .story { background:var(--card); border:1px solid #1f2330; border-radius:18px; padding:30px; margin-bottom:32px; transition:transform .2s ease, box-shadow .2s ease; }
+  .story:hover { transform:translateY(-2px); box-shadow:0 12px 36px rgba(0,0,0,.45); border-color:#2a2e3d; }
+  .story h2 { margin:0 0 14px; font-size:24px; color:#ff8a8a; display:flex; align-items:center; gap:12px; }
+  .story .icon { font-size:28px; }
+  .story .meta { color:#73768a; font-size:13px; margin-bottom:14px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
   .tag { background:#1f2330; border:1px solid #2a2e3d; padding:4px 10px; border-radius:999px; font-size:12px; color:#ff8a8a; }
+  .story p { margin:0 0 14px; color:var(--muted); }
+  .highlight { color:#ff8a8a; font-weight:600; }
   footer { text-align:center; padding:50px 20px; color:#5f6275; font-size:13px; border-top:1px solid #1f2330; margin-top:50px; }
-  .btn { display:inline-block; padding:14px 20px; border-radius:12px; background:#1f2330; color:#ff8a8a; text-decoration:none; font-weight:700; border:1px solid #2a2e3d; transition:background .15s; }
-  .btn:hover { background:#262a37; }
+  .btn { display:inline-block; padding:14px 20px; border-radius:12px; background:#1f2330; color:#ff8a8a; text-decoration:none; font-weight:700; border:1px solid #2a2e3d; }
   .topnav { display:flex; gap:16px; justify-content:center; padding:18px; flex-wrap:wrap; }
   .section-title { font-size:28px; margin:0 0 22px; display:flex; align-items:center; gap:12px; }
-  .ghost-divider { text-align:center; font-size:26px; letter-spacing:8px; opacity:.7; margin:36px 0; }
-  .highlight { color:#ff8a8a; font-weight:600; }
-  .evidence-list { color:var(--muted); padding-left:18px; }
-  .evidence-list li { margin-bottom:8px; }
+  .ghost-divider { text-align:center; font-size:26px; letter-spacing:8px; opacity:.7; margin:50px 0; }
+  .evidence-list { color:var(--muted); padding-left:20px; }
+  .evidence-list li { margin-bottom:10px; }
   .submit-box { background:#12151f; border:1px dashed #2a2e3d; border-radius:18px; padding:28px; text-align:center; }
-  .submit-box a { font-size:18px; }
-  .ghost-svg { width:64px; height:64px; display:block; margin:0 auto 10px; }
+  .toc { background:#12151f; border:1px solid #1f2330; border-radius:18px; padding:22px 26px; margin-bottom:36px; }
+  .toc h3 { margin:0 0 12px; font-size:18px; color:#ff8a8a; }
+  .toc a { display:block; padding:6px 0; color:#cfd0d8; font-size:15px; }
+  .toc a:hover { color:#ff8a8a; }
 </style>
 </head>
 <body>
@@ -49,71 +49,120 @@
 </header>
 
 <div class="wrap">
+
+  <div class="toc">
+    <h3>📑 In This Investigation</h3>
+    <a href="#s1">🏰 The Watchman of Rochester Castle</a>
+    <a href="#s2">🥁 Phantom Drummer of the Great Lines</a>
+    <a href="#s3">🚉 Gillingham Station Apparition</a>
+    <a href="#s4">⚓ The Dockside Whisperer</a>
+    <a href="#s5">⛪ Rochester Cathedral Shadow</a>
+    <a href="#s6">🔦 The Lights of Great Lines</a>
+  </div>
+
   <section id="stories">
-    <h2 class="section-title">👻 Recent Encounters</h2>
-    <div class="grid">
-      <article class="card">
-        <h3><span class="icon">🏰</span> The Watchman of Rochester Castle</h3>
-        <p>Night staff report <span class="highlight">footsteps on the keep stairs</span> after closing, with no visible source. Temperature drops noted near the east tower, sometimes exceeding <span class="highlight">5°C in seconds</span>.</p>
-        <div class="meta"><span class="tag">Rochester Castle</span> Last updated Aug 2026</div>
-      </article>
-      <article class="card">
-        <h3><span class="icon">🥁</span> Phantom Drummer of the Great Lines</h3>
-        <p>Visitors on Chatham’s Great Lines have reported hearing <span class="highlight">faint drumming late at night</span>, echoing historic military parades. Some claim the rhythm matches an 18th-century march.</p>
-        <div class="meta"><span class="tag">Great Lines, Chatham</span> Summer 2026</div>
-      </article>
-      <article class="card">
-        <h3><span class="icon">🚉</span> Gillingham Station Apparition</h3>
-        <p>A figure in Victorian clothing has been seen standing on <span class="highlight">platform 2</span> shortly before the last train, vanishing when approached. Platform staff have logged three separate reports since 2024.</p>
-        <div class="meta"><span class="tag">Gillingham Railway Station</span> Ongoing reports</div>
-      </article>
-      <article class="card">
-        <h3><span class="icon">⚓</span> The Dockside Whisperer</h3>
-        <p>Along the historic Medway dockside, walkers have heard <span class="highlight">disembodied whispers</span> in an unknown dialect, believed by some to be from dock workers from the 1800s.</p>
-        <div class="meta"><span class="tag">Chatham Historic Dockyard</span> Sporadic</div>
-      </article>
-      <article class="card">
-        <h3><span class="icon">⛪</span> Rochester Cathedral Shadow</h3>
-        <p>A tall shadow without a source is said to glide across the cathedral’s north aisle during evening evensong. Clergy have noted cold spots and unexplained organ notes.</p>
-        <div class="meta"><span class="tag">Rochester Cathedral</span> Occasional</div>
-      </article>
-      <article class="card">
-        <h3><span class="icon">🔦</span> The Lights of Great Lines</h3>
-        <p>Late-night visitors report unexplained orbs of light moving across the ramparts. Some have captured thermal anomalies during after-hours investigations.</p>
-        <div class="meta"><span class="tag">Great Lines Heritage Park</span> Increasing 2025-2026</div>
-      </article>
-    </div>
+
+    <article class="story" id="s1">
+      <h2><span class="icon">🏰</span> The Watchman of Rochester Castle</h2>
+      <div class="meta"><span class="tag">Rochester Castle</span> <span class="tag">Norman Keep</span> Last updated Aug 2026</div>
+      <p>Rochester Castle has dominated the Medway skyline since the 12th century, its great keep surviving sieges, abandonment, and centuries of English weather. For as long as staff can remember, something else has survived with it: the Watchman. Night cleaners, security officers, and late-night historians have repeatedly described the same phenomenon — footsteps ascending the keep’s spiral staircase long after the castle is locked, when no one else is inside.</p>
+      <p>One security guard, Mark T., recounted a 2023 winter shift when he completed his final sweep of the ground floor and heard distinct, heavy footsteps directly above him on the stone stairs. He called out. The footsteps stopped. When he climbed to the first landing, there was no one there, no open window, and no access point from which a person could have fled. Temperature readings taken moments later showed a <span class="highlight">drop of more than 6°C</span> in a stairwell that had been stable at 16°C all evening.</p>
+      <p>Local historians point to the castle’s bloody past. During the 1215 siege, forces loyal to King John breached the defences after weeks of starvation. Some accounts suggest survivors were trapped in the upper floors and left to perish. Whether that gave rise to a lingering presence is unproven, but the consistency of the reports — across different staff, different seasons, and different years — keeps investigators returning.</p>
+      <p>In 2025, a small paranormal research group spent three nights inside the keep with audio recorders and thermal cameras. They captured what they describe as “heavy, deliberate footsteps” on the north stairwell at 02:17, 02:19, and 02:21 — matching the cadence of a single person climbing slowly. No visual confirmation was obtained, but the audio has been played to several independent reviewers who agreed the sounds were not ambient noise or building creaks.</p>
+      <p>The east tower remains the coldest spot. During a public open-day investigation in August 2026, volunteers recorded a thermal anomaly of <span class="highlight">4.2°C below ambient</span> moving slowly along the east wall, then vanishing near the corner. No explanation for the heat differential has been found. The castle’s management now allows limited evening access for research groups, making Rochester one of the most actively documented sites in Kent.</p>
+    </article>
+
+    <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
+
+    <article class="story" id="s2">
+      <h2><span class="icon">🥁</span> Phantom Drummer of the Great Lines</h2>
+      <div class="meta"><span class="tag">Great Lines, Chatham</span> <span class="tag">Military Heritage</span> Summer 2026</div>
+      <p>The Great Lines are not naturally haunted ground — they were made for war. These vast, geometric parade grounds were designed to defend the Chatham Dockyard and to drill thousands of soldiers through the Napoleonic era, the Victorian period, and into the 20th century. The rhythms of military life were once constant here: marching feet, shouted commands, and drumbeat cadences that echoed across the ramparts for miles.</p>
+      <p>Today, the drums are gone. But not the sound. Since at least the 1970s, walkers and night-shift security staff have reported hearing faint drumming late at night, usually between midnight and 3 a.m., when the Lines are empty and the surrounding town is quiet. The sound is rarely loud; it is more often described as a <span class="highlight">distant, muffled rhythm</span>, as though coming from across water or down a long stone corridor.</p>
+      <p>Several witnesses have tried to match the pattern to known marches. A 2024 account from a local musician described it as “an 18th-century steady-step cadence, not the modern British Army quick march.” Another witness in 2026 said the drumming seemed to “roll from the far end toward you, then stop dead,” as though the drummer had reached an invisible barrier.</p>
+      <p>The Great Lines Trust has noted the reports with interest but does not officially endorse paranormal explanations. Local ghost-tour operators, however, have made the phantom drummer a regular stop, and at least two investigation teams have recorded unexplained thumping sounds near the Gordon Ravine during overnight vigils. Audio analysis of those recordings shows rhythmic peaks that are unlikely to be wind, traffic, or wildlife.</p>
+      <p>One theory is that the drumming is a residual imprint — energy left by decades of military drilling that occasionally replays under the right atmospheric conditions. Another suggests a connection to the many soldiers who passed through Chatham on their way to conflict, some never returning. Whether the drummer is memory, message, or something else, the Great Lines remain one of the most reliably reported acoustic anomalies in Kent.</p>
+    </article>
+
+    <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
+
+    <article class="story" id="s3">
+      <h2><span class="icon">🚉</span> Gillingham Railway Station Apparition</h2>
+      <div class="meta"><span class="tag">Gillingham Railway Station</span> <span class="tag">Platform 2</span> Ongoing reports</div>
+      <p>Gillingham Station is a working terminus on the Medway Valley line, busy with commuters and freight. But after the last train, when the platform lights dim and the ticket office closes, something else is said to appear. Since 2022, station staff and late-night passengers have reported a figure standing on Platform 2, dressed in <span class="highlight">Victorian-era clothing</span>: a dark coat, cap, and what one witness called “the look of someone who’s been waiting a long time.”</p>
+      <p>The figure does not move. It does not speak. When approached, it reportedly fades or turns away, and by the time the witness reaches the spot, it is gone. Three separate staff members have logged written accounts since 2024, all describing the same location: the far end of Platform 2, near the waiting room door. No CCTV footage has been released publicly, but internal reviews reportedly show unexplained reflections and cold spots in the same area during overnight hours.</p>
+      <p>Local historians note that Gillingham’s railway history stretches back to the 19th century, a time of industrial expansion and frequent accidents. One theory links the apparition to an unrecorded fatality on the line — perhaps a worker or passenger who never left. Others suggest the figure is a residual memory of the station’s busiest Victorian years, when Platform 2 handled thousands of departures and arrivals.</p>
+      <p>In early 2026, a group of independent investigators spent two nights at the station with EMF meters, thermal cameras, and audio recorders. They detected a consistent EMF spike near the waiting room door at 11:47 p.m. and again at 1:22 a.m. On the second night, a team member captured a thermal image showing a warm spot moving against the platform’s natural cooling gradient. The image has not been independently verified, but it is included in the group’s field report.</p>
+      <p>Station management has not commented publicly but is understood to allow limited research access outside operational hours, provided it does not interfere with safety. For now, Platform 2 remains one of the most reliable ghost hotspots in the Medway area — and one of the most accessible.</p>
+    </article>
+
+    <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
+
+    <article class="story" id="s4">
+      <h2><span class="icon">⚓</span> The Dockside Whisperer</h2>
+      <div class="meta"><span class="tag">Chatham Historic Dockyard</span> <span class="tag">Waterfront</span> Sporadic</div>
+      <p>Chatham Historic Dockyard is one of the largest and most complete surviving dockyards in the world. For more than 400 years, ships were built, repaired, and launched here, and the lives of thousands of dockworkers unfolded along its cobbled streets and covered slipways. It is hardly surprising that a place with such layered human history should carry echoes of it — including voices.</p>
+      <p>Walkers closing the dockyard after hours, particularly along the riverside paths near the anchor smithy and the covered slips, have reported hearing <span class="highlight">disembodied whispers</span>. The voices are rarely clear enough to understand, but witnesses consistently describe them as male, low, and speaking in what sounds like an old Kent dialect or sea-faring slang. Some have likened it to the murmur of a large group of men talking quietly just out of sight.</p>
+      <p>A 2024 account from a night-shift security officer is typical. He wrote: “I was doing the rounds along the river wall when I heard what I thought was another guard ahead of me, talking on a radio maybe. I called out. No answer. I walked faster. The talking got louder, then cut off completely. I rounded the corner and there was no one. Not even a boat on the river.”</p>
+      <p>Another recurring feature is the smell of tar and rope appearing suddenly in areas where no restoration work is taking place. The dockyard’s characteristic Victorian-era odours are well documented, but these episodes occur in sealed or empty spaces where no materials are stored.</p>
+      <p>Paranormal investigators have recorded hours of audio in the dockyard’s quieter zones. While most captures are ordinary night sounds — wind, distant traffic, wildlife — a handful contain faint, rhythmic speech-like patterns. One EVP session in 2025 produced what a reviewer described as “a sentence-like burst of sound” lasting under two seconds. No consensus on the wording exists, but those who have listened agree it is not random noise.</p>
+      <p>The dockyard itself is cautiously open to after-hours research through organised events, and several local groups list it as a key site. The combination of whispers, smells, and thermal anomalies makes it a compelling location for anyone interested in residual haunting — the idea that emotions and activities can leave an imprint on a place, replaying under the right conditions.</p>
+    </article>
+
+    <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
+
+    <article class="story" id="s5">
+      <h2><span class="icon">⛪</span> Rochester Cathedral Shadow</h2>
+      <div class="meta"><span class="tag">Rochester Cathedral</span> <span class="tag">Religious Site</span> Occasional</div>
+      <p>Rochester Cathedral is the second-oldest church in continuous use in England, founded in 604 AD and rebuilt in the Norman period. Its stone walls have absorbed centuries of prayer, music, and ceremony — and, according to some witnesses, something quieter and darker. Reports of shadow figures in the cathedral are relatively rare, but they are consistent in detail, which gives them weight.</p>
+      <p>The most common account involves a <span class="highlight">tall, indistinct shadow</span> moving across the north aisle during evening evensong or during private prayer. It does not appear on the walls; it appears to move across the floor, detached from any obvious source. Witnesses say it glides rather than walks, and that it disappears near the pulpit or the vestry door. No one has reported being frightened by it, but the feeling of being watched is common.</p>
+      <p>Clergy at the cathedral have acknowledged the reports privately. One canon, speaking anonymously, said: “We have old buildings. Old buildings have old sounds. Most of the time there is a rational explanation. But there are a few moments when you cannot explain what you just saw.”</p>
+      <p>Cold spots are another recurring feature. During a 2025 winter evensong, a visitor recorded a temperature of <span class="highlight">9.4°C</span> near the north aisle, while the rest of the nave held at 17°C. The cold zone lasted roughly eight minutes and moved slowly toward the vestry before disappearing. The cathedral’s heating system was not active that evening due to a scheduled maintenance shutdown.</p>
+      <p>Musicians have also noted unexplained organ sounds. An organist practicing alone in 2026 reported hearing a single, low note sustain for several seconds after he had stopped playing. He checked the pedalboard; it was untouched. The sound faded without anyone touching the instrument. Whether these events share a single cause — a residual presence, acoustic quirks, or something else — is still debated.</p>
+      <p>The cathedral works with local historians and paranormal research groups on a limited basis, allowing carefully supervised investigations outside public hours. These events are always respectful of the cathedral’s active worship schedule, and all findings are treated as part of the building’s ongoing story rather than sensational evidence.</p>
+    </article>
+
+    <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
+
+    <article class="story" id="s6">
+      <h2><span class="icon">🔦</span> The Lights of Great Lines</h2>
+      <div class="meta"><span class="tag">Great Lines Heritage Park</span> <span class="tag">Ramparts</span> Increasing 2025-2026</div>
+      <p>If the Phantom Drummer is the sound of the Great Lines, the Lights are its visual signature. In recent years, reports of unexplained orbs and light anomalies on the ramparts have risen sharply — partly because more people visit the park after dark, and partly because smartphones and cheap thermal cameras have made documentation easier.</p>
+      <p>Witnesses describe <span class="highlight">small, pale orbs</span> drifting across the upper paths and over the grassy ramparts, usually between 10 p.m. and 2 a.m. The lights are not steady; they pulse, move in non-linear paths, and sometimes appear to respond to the observer. One couple in 2025 reported a light that seemed to follow their car along the park road before rising and disappearing over the trees. Another group of friends filming a TikTok near the Gordon Ravine captured a bright point that moved against the wind direction.</p>
+      <p>Local paranormal investigators have started using thermal imaging to separate natural explanations from anomalies. Thermal cameras can see heat that the naked eye cannot. During a 2026 overnight survey, a team recorded a <span class="highlight">thermal signature moving across the rampart</span> at approximately 12:40 a.m. in conditions too cool for insects or animals. The signature was warmer than the stone path but cooler than a human body, and it moved in a straight line before stopping abruptly.</p>
+      <p>Several theories attempt to explain the lights. Residual energy from the site’s military past is one. Another is that the chalk geology beneath the Great Lines interacts with underground water in a way that creates rare natural light phenomena. A third suggestion is simpler: people are seeing reflections from distant road traffic or aircraft, misinterpreted because of the park’s exposed elevation. What keeps the mystery alive is the number of reports from experienced observers — including amateur astronomers and night photographers — who are familiar with atmospheric optics and still cannot explain what they saw.</p>
+      <p>The increasing frequency of reports has made the Lights a fixture of local ghost discourse. Social media groups dedicated to Medway paranormal activity now receive monthly submissions. Whether the lights are residual, intelligent, or entirely natural, they have firmly established the Great Lines as one of the most active and visually interesting sites in Kent.</p>
+    </article>
+
   </section>
 
   <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
 
   <section id="locations">
     <h2 class="section-title">📍 Key Locations</h2>
-    <div class="grid">
-      <article class="card">
-        <h3><span class="icon">🏰</span> Rochester Castle & Cathedral</h3>
-        <p>Norman keep, siege tunnels, and medieval precinct. <span class="highlight">High concentration of cold-spot reports</span> and unexplained sounds near the east tower and undercroft.</p>
-      </article>
-      <article class="card">
-        <h3><span class="icon">🎖️</span> Great Lines Chatham</h3>
-        <p>Former military parade grounds. Oral histories cite <span class="highlight">phantom marching</span> and lights seen on the ramparts. Popular with paranormal investigation groups.</p>
-      </article>
-      <article class="card">
-        <h3><span class="icon">🚢</span> Gillingham & the Medway River</h3>
-        <p>Historic dockside and riverside paths associated with <span class="highlight">Victorian-era apparitions</span> and disembodied voices near the waterfront.</p>
-      </article>
-      <article class="card">
-        <h3><span class="icon">⚓</span> Chatham Historic Dockyard</h3>
-        <p>One of the most haunted maritime sites in the UK. Reports include shadow figures, sudden drops in temperature, and the smell of tar and rope where no source exists.</p>
-      </article>
-      <article class="card">
-        <h3><span class="icon">🛤️</span> Gillingham Railway Station</h3>
-        <p>Platform 2 is the hotspot. Staff and passengers alike have reported a <span class="highlight">Victorian-clad figure</span> that appears minutes before the last service.</p>
-      </article>
-      <article class="card">
-        <h3><span class="icon">⛪</span> Rochester Cathedral</h3>
-        <p>Ancient religious site with a long recorded history. Current phenomena include shadow figures, unexplained sounds, and cold spots during evening services.</p>
-      </article>
+    <div class="story">
+      <h3><span class="icon">🏰</span> Rochester Castle & Cathedral</h3>
+      <p>The Norman keep and its adjoining cathedral form the medieval heart of Rochester. Both sites have long histories of conflict, worship, and community, and both are now well documented by paranormal research groups. Cold spots, footsteps, and shadow figures are the most commonly reported phenomena. Limited evening access is available for organised investigations.</p>
+    </div>
+    <div class="story">
+      <h3><span class="icon">🎖️</span> Great Lines Chatham</h3>
+      <p>The geometric parade grounds and ramparts of the Great Lines were built to protect the dockyard and to drill thousands of soldiers. Today they are a public park with a strong reputation for acoustic anomalies and light sightings. The phantom drummer and the Lights are the two best-known phenomena, but reports of shadow figures and sudden temperature drops are also common.</p>
+    </div>
+    <div class="story">
+      <h3><span class="icon">🚢</span> Gillingham & the Medway River</h3>
+      <p>The historic dockside and riverside paths between Chatham and Gillingham carry the memories of centuries of maritime trade. Disembodied voices, unexplained smells, and sudden cold are regularly reported, especially near the anchor smithy and the covered slips.</p>
+    </div>
+    <div class="story">
+      <h3><span class="icon">⚓</span> Chatham Historic Dockyard</h3>
+      <p>One of the most complete surviving dockyards in the world, covering 80 acres of historic buildings, slips, and workshops. It is widely regarded as one of the most haunted maritime sites in the UK, with reports spanning shadow figures, whispers, smells of tar and rope, and unexplained mechanical sounds.</p>
+    </div>
+    <div class="story">
+      <h3><span class="icon">🛤️</span> Gillingham Railway Station</h3>
+      <p>Platform 2 is the hotspot for the Victorian apparition. The station is fully operational, so investigations must be coordinated with management. Reports are consistent: a figure in period dress, vanishing when approached, often accompanied by a sudden temperature drop.</p>
+    </div>
+    <div class="story">
+      <h3><span class="icon">⛪</span> Rochester Cathedral</h3>
+      <p>The oldest church in continuous use in England. Phenomena include shadow figures in the north aisle, cold spots, and unexplained organ sounds. The cathedral is open to respectful, supervised research outside public services.</p>
     </div>
   </section>
 
@@ -121,8 +170,8 @@
 
   <section id="evidence">
     <h2 class="section-title">🕯️ Reported Evidence & Phenomena</h2>
-    <div class="card">
-      <h3>What investigators and witnesses report</h3>
+    <div class="story">
+      <h3>What investigators and witnesses consistently report</h3>
       <ul class="evidence-list">
         <li>📉 <span class="highlight">Temperature drops</span> of 3–8°C in seconds, often without ventilation changes.</li>
         <li>👣 Unexplained <span class="highlight">footsteps</span> on stone staircases and wooden floors after hours.</li>
@@ -131,6 +180,9 @@
         <li>👤 <span class="highlight">Shadow figures</span> moving independently of any living person.</li>
         <li>🥁 <span class="highlight">Phantom drumming</span> matching historic military marches.</li>
         <li>🧊 Persistent <span class="highlight">cold spots</span> in the same locations across multiple visits.</li>
+        <li>📡 <span class="highlight">EMF spikes</span> near reported hotspots with no electrical source.</li>
+        <li>🎙️ <span class="highlight">EVP captures</span>: brief, speech-like audio bursts not attributable to ambient noise.</li>
+        <li>📸 <span class="highlight">Thermal anomalies</span> moving across ramparts and aisles with no visible cause.</li>
       </ul>
     </div>
   </section>
