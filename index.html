@@ -5,82 +5,151 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Medway Ghosts — Paranormal Investigations</title>
 <style>
-  :root { --bg:#0b0d14; --card:#12151f; --text:#e6e8ef; --muted:#a8aab5; --accent:#c9302c; }
+  :root { --bg:#0b0d14; --card:#12151f; --text:#e6e8ef; --muted:#a8aab5; --accent:#c9302c; --glow:#ff6b6b55; }
   * { box-sizing: border-box; }
-  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
-  a { color:#ff6b6b; }
-  header { padding:60px 20px 40px; text-align:center; border-bottom:1px solid #1f2330; }
-  header h1 { margin:0; font-size:clamp(32px,5vw,56px); letter-spacing:1px; }
-  header p { color:var(--muted); margin-top:8px; }
-  .wrap { max-width:960px; margin:0 auto; padding:40px 20px; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  a { color:#ff6b6b; text-decoration:none; }
+  header { padding:70px 20px 50px; text-align:center; border-bottom:1px solid #1f2330; background:radial-gradient(ellipse at center,#1a1424 0%,#0b0d14 70%); position:relative; overflow:hidden; }
+  header::before { content:'👻 🎃 👻 🎃 👻'; position:absolute; top:18px; left:0; right:0; text-align:center; font-size:22px; opacity:.35; letter-spacing:12px; }
+  header h1 { margin:0; font-size:clamp(36px,6vw,64px); letter-spacing:2px; text-shadow:0 0 30px var(--glow); }
+  header p { color:var(--muted); margin-top:12px; font-size:18px; max-width:640px; margin-left:auto; margin-right:auto; }
+  .wrap { max-width:1000px; margin:0 auto; padding:50px 20px; }
   .grid { display:grid; gap:24px; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
-  .card { background:var(--card); border:1px solid #1f2330; border-radius:16px; padding:22px; transition:transform .15s ease, box-shadow .15s ease; }
-  .card:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.35); }
-  .card h3 { margin:0 0 8px; font-size:20px; color:#ff8a8a; }
+  .card { background:var(--card); border:1px solid #1f2330; border-radius:18px; padding:26px; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .card:hover { transform:translateY(-3px); box-shadow:0 14px 40px rgba(0,0,0,.5); border-color:#2a2e3d; }
+  .card h3 { margin:0 0 10px; font-size:21px; color:#ff8a8a; display:flex; align-items:center; gap:10px; }
+  .card .icon { font-size:26px; }
   .card p { margin:0; color:var(--muted); }
-  .meta { color:#73768a; font-size:13px; margin-top:10px; }
-  footer { text-align:center; padding:40px 20px; color:#5f6275; font-size:13px; border-top:1px solid #1f2330; margin-top:40px; }
-  .btn { display:inline-block; padding:12px 18px; border-radius:10px; background:#1f2330; color:#ff8a8a; text-decoration:none; font-weight:600; border:1px solid #2a2e3d; }
-  .topnav { display:flex; gap:14px; justify-content:center; padding:14px; }
+  .meta { color:#73768a; font-size:13px; margin-top:12px; display:flex; align-items:center; gap:8px; }
+  .tag { background:#1f2330; border:1px solid #2a2e3d; padding:4px 10px; border-radius:999px; font-size:12px; color:#ff8a8a; }
+  footer { text-align:center; padding:50px 20px; color:#5f6275; font-size:13px; border-top:1px solid #1f2330; margin-top:50px; }
+  .btn { display:inline-block; padding:14px 20px; border-radius:12px; background:#1f2330; color:#ff8a8a; text-decoration:none; font-weight:700; border:1px solid #2a2e3d; transition:background .15s; }
+  .btn:hover { background:#262a37; }
+  .topnav { display:flex; gap:16px; justify-content:center; padding:18px; flex-wrap:wrap; }
+  .section-title { font-size:28px; margin:0 0 22px; display:flex; align-items:center; gap:12px; }
+  .ghost-divider { text-align:center; font-size:26px; letter-spacing:8px; opacity:.7; margin:36px 0; }
+  .highlight { color:#ff8a8a; font-weight:600; }
+  .evidence-list { color:var(--muted); padding-left:18px; }
+  .evidence-list li { margin-bottom:8px; }
+  .submit-box { background:#12151f; border:1px dashed #2a2e3d; border-radius:18px; padding:28px; text-align:center; }
+  .submit-box a { font-size:18px; }
+  .ghost-svg { width:64px; height:64px; display:block; margin:0 auto 10px; }
 </style>
 </head>
 <body>
 <header>
-  <h1>MEDWAY GHOSTS</h1>
+  <h1>👻 MEDWAY GHOSTS 👻</h1>
   <p>Paranormal investigations across the Medway towns — Rochester, Chatham, Gillingham, and beyond.</p>
-  <div class="topnav">
+  <nav class="topnav">
     <a class="btn" href="#stories">Stories</a>
     <a class="btn" href="#locations">Locations</a>
+    <a class="btn" href="#evidence">Evidence</a>
     <a class="btn" href="#submit">Submit a sighting</a>
-  </div>
+  </nav>
 </header>
+
 <div class="wrap">
   <section id="stories">
-    <h2>Recent Encounters</h2>
+    <h2 class="section-title">👻 Recent Encounters</h2>
     <div class="grid">
       <article class="card">
-        <h3>The Watchman of Rochester Castle</h3>
-        <p>Night staff report footsteps on the keep stairs after closing, with no visible source. Temperature drops noted near the east tower.</p>
-        <div class="meta">Rochester Castle • Last updated Aug 2026</div>
+        <h3><span class="icon">🏰</span> The Watchman of Rochester Castle</h3>
+        <p>Night staff report <span class="highlight">footsteps on the keep stairs</span> after closing, with no visible source. Temperature drops noted near the east tower, sometimes exceeding <span class="highlight">5°C in seconds</span>.</p>
+        <div class="meta"><span class="tag">Rochester Castle</span> Last updated Aug 2026</div>
       </article>
       <article class="card">
-        <h3>Phantom Drummer of the Great Lines</h3>
-        <p>Visitors on Chatham’s Great Lines have reported hearing faint drumming late at night, echoing historic military parades.</p>
-        <div class="meta">Great Lines, Chatham • Summer 2026</div>
+        <h3><span class="icon">🥁</span> Phantom Drummer of the Great Lines</h3>
+        <p>Visitors on Chatham’s Great Lines have reported hearing <span class="highlight">faint drumming late at night</span>, echoing historic military parades. Some claim the rhythm matches an 18th-century march.</p>
+        <div class="meta"><span class="tag">Great Lines, Chatham</span> Summer 2026</div>
       </article>
       <article class="card">
-        <h3>Gillingham Station Apparition</h3>
-        <p>A figure in period clothing has been seen standing on platform 2 shortly before the last train, vanishing when approached.</p>
-        <div class="meta">Gillingham Railway Station • Ongoing reports</div>
+        <h3><span class="icon">🚉</span> Gillingham Station Apparition</h3>
+        <p>A figure in Victorian clothing has been seen standing on <span class="highlight">platform 2</span> shortly before the last train, vanishing when approached. Platform staff have logged three separate reports since 2024.</p>
+        <div class="meta"><span class="tag">Gillingham Railway Station</span> Ongoing reports</div>
+      </article>
+      <article class="card">
+        <h3><span class="icon">⚓</span> The Dockside Whisperer</h3>
+        <p>Along the historic Medway dockside, walkers have heard <span class="highlight">disembodied whispers</span> in an unknown dialect, believed by some to be from dock workers from the 1800s.</p>
+        <div class="meta"><span class="tag">Chatham Historic Dockyard</span> Sporadic</div>
+      </article>
+      <article class="card">
+        <h3><span class="icon">⛪</span> Rochester Cathedral Shadow</h3>
+        <p>A tall shadow without a source is said to glide across the cathedral’s north aisle during evening evensong. Clergy have noted cold spots and unexplained organ notes.</p>
+        <div class="meta"><span class="tag">Rochester Cathedral</span> Occasional</div>
+      </article>
+      <article class="card">
+        <h3><span class="icon">🔦</span> The Lights of Great Lines</h3>
+        <p>Late-night visitors report unexplained orbs of light moving across the ramparts. Some have captured thermal anomalies during after-hours investigations.</p>
+        <div class="meta"><span class="tag">Great Lines Heritage Park</span> Increasing 2025-2026</div>
       </article>
     </div>
   </section>
 
-  <section id="locations" style="margin-top:40px;">
-    <h2>Key Locations</h2>
+  <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
+
+  <section id="locations">
+    <h2 class="section-title">📍 Key Locations</h2>
     <div class="grid">
       <article class="card">
-        <h3>Rochester Castle & Cathedral</h3>
-        <p>Norman keep, siege tunnels, and medieval precinct. High concentration of cold-spot reports and unexplained sounds.</p>
+        <h3><span class="icon">🏰</span> Rochester Castle & Cathedral</h3>
+        <p>Norman keep, siege tunnels, and medieval precinct. <span class="highlight">High concentration of cold-spot reports</span> and unexplained sounds near the east tower and undercroft.</p>
       </article>
       <article class="card">
-        <h3>Great Lines Chatham</h3>
-        <p>Former military parade grounds. Oral histories cite phantom marching and lights seen on the ramparts.</p>
+        <h3><span class="icon">🎖️</span> Great Lines Chatham</h3>
+        <p>Former military parade grounds. Oral histories cite <span class="highlight">phantom marching</span> and lights seen on the ramparts. Popular with paranormal investigation groups.</p>
       </article>
       <article class="card">
-        <h3>Gillingham & the Medway River</h3>
-        <p>Historic dockside and riverside paths associated with Victorian-era apparitions and disembodied voices.</p>
+        <h3><span class="icon">🚢</span> Gillingham & the Medway River</h3>
+        <p>Historic dockside and riverside paths associated with <span class="highlight">Victorian-era apparitions</span> and disembodied voices near the waterfront.</p>
+      </article>
+      <article class="card">
+        <h3><span class="icon">⚓</span> Chatham Historic Dockyard</h3>
+        <p>One of the most haunted maritime sites in the UK. Reports include shadow figures, sudden drops in temperature, and the smell of tar and rope where no source exists.</p>
+      </article>
+      <article class="card">
+        <h3><span class="icon">🛤️</span> Gillingham Railway Station</h3>
+        <p>Platform 2 is the hotspot. Staff and passengers alike have reported a <span class="highlight">Victorian-clad figure</span> that appears minutes before the last service.</p>
+      </article>
+      <article class="card">
+        <h3><span class="icon">⛪</span> Rochester Cathedral</h3>
+        <p>Ancient religious site with a long recorded history. Current phenomena include shadow figures, unexplained sounds, and cold spots during evening services.</p>
       </article>
     </div>
   </section>
 
-  <section id="submit" style="margin-top:40px;">
-    <h2>Submit a Sighting</h2>
-    <p>Have you experienced something unexplained in the Medway area? Email details to <a href="mailto:jasonmariakieran@gmail.com">jasonmariakieran@gmail.com</a>.</p>
+  <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
+
+  <section id="evidence">
+    <h2 class="section-title">🕯️ Reported Evidence & Phenomena</h2>
+    <div class="card">
+      <h3>What investigators and witnesses report</h3>
+      <ul class="evidence-list">
+        <li>📉 <span class="highlight">Temperature drops</span> of 3–8°C in seconds, often without ventilation changes.</li>
+        <li>👣 Unexplained <span class="highlight">footsteps</span> on stone staircases and wooden floors after hours.</li>
+        <li>🗣️ <span class="highlight">Disembodied whispers</span> and voices in historic languages or dialects.</li>
+        <li>💡 <span class="highlight">Orbs and light anomalies</span> captured on camera, especially on the Great Lines ramparts.</li>
+        <li>👤 <span class="highlight">Shadow figures</span> moving independently of any living person.</li>
+        <li>🥁 <span class="highlight">Phantom drumming</span> matching historic military marches.</li>
+        <li>🧊 Persistent <span class="highlight">cold spots</span> in the same locations across multiple visits.</li>
+      </ul>
+    </div>
+  </section>
+
+  <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
+
+  <section id="submit">
+    <h2 class="section-title">📩 Submit a Sighting</h2>
+    <div class="submit-box">
+      <p>Have you experienced something unexplained in the Medway area? We’d love to hear from you.</p>
+      <p style="margin-top:12px;">Email your story, date, location, and any photos to:<br>
+      <a href="mailto:jasonmariakieran@gmail.com">jasonmariakieran@gmail.com</a></p>
+      <p style="margin-top:14px; color:#5f6275; font-size:13px;">All submissions are reviewed before publishing. Please include contact details if you’re open to follow-up questions.</p>
+    </div>
   </section>
 </div>
+
 <footer>
-  Built by CloudHermes for Jason Harvey • Medway Ghosts • 2026
+  👻 Built by CloudHermes for Jason Harvey • Medway Ghosts • 2026 💀
 </footer>
 </body>
 </html>
