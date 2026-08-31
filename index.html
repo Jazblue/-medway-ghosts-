@@ -5,38 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Medway Ghosts — Paranormal Investigations</title>
 <style>
-  :root { --bg:#0b0d14; --card:#12151f; --text:#e6e8ef; --muted:#a8aab5; --accent:#c9302c; --glow:#ff6b6b55; }
+  :root { --bg:#07080d; --card:#0f1118; --text:#d8dae5; --muted:#8b8ea0; --accent:#b02a2a; --glow:#ff4d4d55; --fog:rgba(120,130,160,0.08); }
   * { box-sizing: border-box; }
-  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.7; }
+  html { scroll-behavior: smooth; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.7; overflow-x:hidden; }
   a { color:#ff6b6b; text-decoration:none; }
-  header { padding:70px 20px 50px; text-align:center; border-bottom:1px solid #1f2330; background:radial-gradient(ellipse at center,#1a1424 0%,#0b0d14 70%); position:relative; overflow:hidden; }
-  header::before { content:'👻 🎃 👻 🎃 👻'; position:absolute; top:18px; left:0; right:0; text-align:center; font-size:22px; opacity:.35; letter-spacing:12px; }
-  header h1 { margin:0; font-size:clamp(36px,6vw,64px); letter-spacing:2px; text-shadow:0 0 30px var(--glow); }
-  header p { color:var(--muted); margin-top:12px; font-size:18px; max-width:720px; margin-left:auto; margin-right:auto; }
-  .wrap { max-width:900px; margin:0 auto; padding:50px 20px; }
-  .story { background:var(--card); border:1px solid #1f2330; border-radius:18px; padding:30px; margin-bottom:32px; transition:transform .2s ease, box-shadow .2s ease; }
-  .story:hover { transform:translateY(-2px); box-shadow:0 12px 36px rgba(0,0,0,.45); border-color:#2a2e3d; }
+  .fog { position:fixed; inset:0; pointer-events:none; z-index:1; background: radial-gradient(ellipse at 50% 50%,var(--fog) 0%, transparent 70%); animation: fogPulse 14s ease-in-out infinite alternate; }
+  @keyframes fogPulse { 0% { opacity:.5; transform:scale(1); } 100% { opacity:.9; transform:scale(1.08); } }
+
+  header { padding:90px 20px 60px; text-align:center; border-bottom:1px solid #1a1c28; background:radial-gradient(ellipse at center,#140f1f 0%,#07080d 70%); position:relative; overflow:hidden; }
+  header::before { content:'👻 🎃 👻 🎃 👻'; position:absolute; top:20px; left:0; right:0; text-align:center; font-size:24px; opacity:.35; letter-spacing:14px; animation: drift 22s linear infinite; }
+  @keyframes drift { 0% { transform:translateX(-40px); } 100% { transform:translateX(40px); } }
+  header h1 { margin:0; font-size:clamp(38px,6vw,68px); letter-spacing:2px; text-shadow:0 0 40px var(--glow), 0 0 80px #ff4d4d33; animation: flicker 6s infinite; }
+  @keyframes flicker { 0%,100% { opacity:1; } 92% { opacity:1; } 93% { opacity:.6; } 94% { opacity:1; } 96% { opacity:.7; } 97% { opacity:1; } }
+  header p { color:var(--muted); margin-top:14px; font-size:18px; max-width:720px; margin-left:auto; margin-right:auto; }
+
+  .wrap { max-width:900px; margin:0 auto; padding:50px 20px; position:relative; z-index:2; }
+  .story { background:var(--card); border:1px solid #1a1c28; border-radius:18px; padding:30px; margin-bottom:32px; transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease; position:relative; overflow:hidden; }
+  .story:hover { transform:translateY(-2px); box-shadow:0 16px 44px rgba(0,0,0,.6); border-color:#2a2e3d; }
+  .story::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 20% 10%,#ffffff06 0%, transparent 40%); pointer-events:none; }
   .story h2 { margin:0 0 14px; font-size:24px; color:#ff8a8a; display:flex; align-items:center; gap:12px; }
   .story .icon { font-size:28px; }
   .story .meta { color:#73768a; font-size:13px; margin-bottom:14px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-  .tag { background:#1f2330; border:1px solid #2a2e3d; padding:4px 10px; border-radius:999px; font-size:12px; color:#ff8a8a; }
+  .tag { background:#12141d; border:1px solid #22253a; padding:4px 10px; border-radius:999px; font-size:12px; color:#ff8a8a; }
   .story p { margin:0 0 14px; color:var(--muted); }
   .highlight { color:#ff8a8a; font-weight:600; }
-  footer { text-align:center; padding:50px 20px; color:#5f6275; font-size:13px; border-top:1px solid #1f2330; margin-top:50px; }
-  .btn { display:inline-block; padding:14px 20px; border-radius:12px; background:#1f2330; color:#ff8a8a; text-decoration:none; font-weight:700; border:1px solid #2a2e3d; }
-  .topnav { display:flex; gap:16px; justify-content:center; padding:18px; flex-wrap:wrap; }
+
+  .ghost-divider { text-align:center; font-size:28px; letter-spacing:10px; opacity:.75; margin:50px 0; animation: drift 18s ease-in-out infinite alternate; }
+
+  footer { text-align:center; padding:50px 20px; color:#5f6275; font-size:13px; border-top:1px solid #1a1c28; margin-top:50px; position:relative; z-index:2; }
+  .btn { display:inline-block; padding:14px 20px; border-radius:12px; background:#12141d; color:#ff8a8a; text-decoration:none; font-weight:700; border:1px solid #22253a; transition:background .15s; }
+  .btn:hover { background:#1a1d2a; }
+  .topnav { display:flex; gap:16px; justify-content:center; padding:18px; flex-wrap:wrap; position:relative; z-index:2; }
   .section-title { font-size:28px; margin:0 0 22px; display:flex; align-items:center; gap:12px; }
-  .ghost-divider { text-align:center; font-size:26px; letter-spacing:8px; opacity:.7; margin:50px 0; }
   .evidence-list { color:var(--muted); padding-left:20px; }
   .evidence-list li { margin-bottom:10px; }
-  .submit-box { background:#12151f; border:1px dashed #2a2e3d; border-radius:18px; padding:28px; text-align:center; }
-  .toc { background:#12151f; border:1px solid #1f2330; border-radius:18px; padding:22px 26px; margin-bottom:36px; }
+  .submit-box { background:#0f1118; border:1px dashed #22253a; border-radius:18px; padding:28px; text-align:center; }
+  .toc { background:#0f1118; border:1px solid #1a1c28; border-radius:18px; padding:22px 26px; margin-bottom:36px; position:relative; z-index:2; }
   .toc h3 { margin:0 0 12px; font-size:18px; color:#ff8a8a; }
   .toc a { display:block; padding:6px 0; color:#cfd0d8; font-size:15px; }
   .toc a:hover { color:#ff8a8a; }
+
+  #ghostCanvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+  .vignette { position:fixed; inset:0; pointer-events:none; z-index:1; background:radial-gradient(ellipse at center, transparent 55%, #000000 100%); opacity:.55; }
+
+  .sound-toggle { position:fixed; bottom:16px; right:16px; z-index:20; background:#12141d; border:1px solid #22253a; color:#ff8a8a; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700; }
+  .sound-toggle:hover { background:#1a1d2a; }
+
+  @media (max-width: 640px) {
+    .story { padding:22px; }
+    header { padding:70px 16px 40px; }
+    .wrap { padding:30px 16px; }
+  }
 </style>
 </head>
 <body>
+<canvas id="ghostCanvas"></canvas>
+<div class="fog"></div>
+<div class="vignette"></div>
+
 <header>
   <h1>👻 MEDWAY GHOSTS 👻</h1>
   <p>Paranormal investigations across the Medway towns — Rochester, Chatham, Gillingham, and beyond.</p>
@@ -49,7 +76,6 @@
 </header>
 
 <div class="wrap">
-
   <div class="toc">
     <h3>📑 In This Investigation</h3>
     <a href="#s1">🏰 The Watchman of Rochester Castle</a>
@@ -61,7 +87,6 @@
   </div>
 
   <section id="stories">
-
     <article class="story" id="s1">
       <h2><span class="icon">🏰</span> The Watchman of Rochester Castle</h2>
       <div class="meta"><span class="tag">Rochester Castle</span> <span class="tag">Norman Keep</span> Last updated Aug 2026</div>
@@ -133,7 +158,6 @@
       <p>Several theories attempt to explain the lights. Residual energy from the site’s military past is one. Another is that the chalk geology beneath the Great Lines interacts with underground water in a way that creates rare natural light phenomena. A third suggestion is simpler: people are seeing reflections from distant road traffic or aircraft, misinterpreted because of the park’s exposed elevation. What keeps the mystery alive is the number of reports from experienced observers — including amateur astronomers and night photographers — who are familiar with atmospheric optics and still cannot explain what they saw.</p>
       <p>The increasing frequency of reports has made the Lights a fixture of local ghost discourse. Social media groups dedicated to Medway paranormal activity now receive monthly submissions. Whether the lights are residual, intelligent, or entirely natural, they have firmly established the Great Lines as one of the most active and visually interesting sites in Kent.</p>
     </article>
-
   </section>
 
   <div class="ghost-divider">👻 🎃 💀 🕯️ 💀 🎃 👻</div>
@@ -203,5 +227,110 @@
 <footer>
   👻 Built by CloudHermes for Jason Harvey • Medway Ghosts • 2026 💀
 </footer>
+
+<button class="sound-toggle" id="soundToggle">🔇 Sound Off</button>
+
+<script>
+  const canvas = document.getElementById('ghostCanvas');
+  const ctx = canvas.getContext('2d');
+  let ghosts = [];
+  let audioCtx = null;
+  let isPlaying = false;
+  let gainNode = null;
+  let oscillators = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  class Ghost {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = canvas.height + 120;
+      this.size = 18 + Math.random() * 32;
+      this.speed = 0.25 + Math.random() * 0.6;
+      this.opacity = 0.08 + Math.random() * 0.18;
+      this.wobble = Math.random() * Math.PI * 2;
+      this.wobbleSpeed = 0.015 + Math.random() * 0.025;
+    }
+    update() {
+      this.y -= this.speed;
+      this.wobble += this.wobbleSpeed;
+      this.x += Math.sin(this.wobble) * 0.6;
+      if (this.y < -140) this.reset();
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.opacity;
+      ctx.fillStyle = '#e8e8ff';
+      ctx.shadowColor = '#ff4d4d';
+      ctx.shadowBlur = 18;
+      ctx.translate(this.x, this.y);
+      ctx.beginPath();
+      ctx.arc(0, 0, this.size, Math.PI, 0);
+      ctx.lineTo(this.size, this.size * 0.9);
+      ctx.bezierCurveTo(this.size * 0.6, this.size * 0.4, this.size * 0.3, this.size * 1.1, -this.size, this.size * 0.9);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  for (let i = 0; i < 14; i++) {
+    const g = new Ghost();
+    g.y = Math.random() * canvas.height;
+    ghosts.push(g);
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ghosts.forEach(g => { g.update(); g.draw(); });
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  document.getElementById('soundToggle').addEventListener('click', () => {
+    const btn = document.getElementById('soundToggle');
+    if (!isPlaying) {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      gainNode = audioCtx.createGain();
+      gainNode.gain.value = 0.03;
+      gainNode.connect(audioCtx.destination);
+      startDrone();
+      btn.textContent = '🔊 Sound On';
+      isPlaying = true;
+    } else {
+      stopDrone();
+      btn.textContent = '🔇 Sound Off';
+      isPlaying = false;
+    }
+  });
+
+  function startDrone() {
+    stopDrone();
+    const base = audioCtx.sampleRate;
+    [55, 110, 165].forEach((freq, i) => {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = i === 0 ? 'sine' : 'triangle';
+      osc.frequency.value = freq;
+      g.gain.value = 0.4 / (i + 1);
+      osc.connect(g);
+      g.connect(gainNode);
+      osc.start();
+      oscillators.push({osc, gain: g});
+    });
+  }
+  function stopDrone() {
+    oscillators.forEach(o => { try { o.osc.stop(); } catch(e) {} });
+    oscillators = [];
+  }
+</script>
 </body>
 </html>
