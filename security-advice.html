@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Advice — Don't Store Bank Details</title>
+<style>
+  :root { --bg:#0b0d14; --card:#12151f; --text:#e6e8ef; --muted:#a8aab5; --accent:#c9302c; --glow:#ff4d4d55; --amber:#d4a03c; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.8; }
+  a { color:#ff6b6b; text-decoration:none; }
+  header { padding:70px 20px 50px; text-align:center; border-bottom:1px solid #1f2330; background:radial-gradient(ellipse at center,#1a1424 0%,#0b0d14 70%); }
+  header h1 { margin:0; font-size:clamp(28px,4.5vw,46px); letter-spacing:1px; text-shadow:0 0 30px var(--glow); color:#ff8a8a; }
+  header p { color:var(--muted); margin-top:10px; font-size:17px; max-width:720px; margin-left:auto; margin-right:auto; }
+  .wrap { max-width:820px; margin:0 auto; padding:50px 20px; }
+  .card { background:var(--card); border:1px solid #1f2330; border-radius:18px; padding:28px 30px; margin-bottom:24px; }
+  .card h2 { margin:0 0 14px; font-size:22px; color:#ff8a8a; }
+  .card p { color:var(--muted); margin:0 0 14px; }
+  .card ul { padding-left:20px; color:var(--muted); }
+  .card li { margin-bottom:10px; }
+  .warning { background:#1a1424; border:1px solid #2a2233; border-radius:12px; padding:16px 20px; margin-bottom:28px; color:#cfc8d8; font-size:14px; }
+  .back { display:inline-block; margin-bottom:20px; color:#ff8a8a; }
+  footer { text-align:center; padding:40px 20px; color:#5f6275; font-size:13px; border-top:1px solid #1f2330; margin-top:40px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Security Advice — Don't Store Bank Details</h1>
+  <p>A simple, practical guide to keeping your accounts safe from token theft, browser saving, and account takeover.</p>
+</header>
+
+<div class="wrap">
+<a class="back" href="index.html">&larr; Back to Medway Ghosts</a>
+
+<div class="warning">
+  <strong>Quick message:</strong> If your browser offers to save your bank details, <strong>say no</strong>. The convenience is not worth the risk.
+</div>
+
+<div class="card">
+  <h2>What Happened</h2>
+  <p>You stored bank details in a browser token. Someone got into your Odin account and tried to pay for a cinema ticket. Barclays caught it, but the breach started because sensitive data was saved locally in a place that wasn't as secure as it looked.</p>
+  <p>This is a common attack path. Tokens and saved form data are easy targets for malware, browser extensions, phishing, or anyone with physical access to your device.</p>
+</div>
+
+<div class="card">
+  <h2>The Core Rule</h2>
+  <p><strong>Never store bank details in your browser.</strong> That means:</p>
+  <ul>
+    <li>Don't save card numbers, expiry dates, or security codes in Chrome, Firefox, Edge, Safari, or any browser password manager.</li>
+    <li>Don't paste bank details into tokens, notes apps, or password fields that aren't your bank's actual site.</li>
+    <li>Don't reuse passwords across banking, email, and shopping sites.</li>
+  </ul>
+  <p style="margin-top:14px;">A compromised password is bad enough on its own. If the browser also has your card saved, the attacker doesn't need to steal anything extra — they just use what's already there. That's likely what happened here.</p>
+</div>
+
+<div class="card">
+  <h2>Why Browsers Are Risky</h2>
+  <ul>
+    <li><strong>Browser sync leaks:</strong> If your Google or Microsoft account is compromised, synced passwords and autofill data go with it.</li>
+    <li><strong>Malware can read autofill:</strong> Some trojans specifically target saved card data in browsers.</li>
+    <li><strong>Extensions are untrusted:</strong> A single malicious extension can read every form you fill.</li>
+    <li><strong>Tokens are persistent:</strong> A stolen session token can let an attacker act as you without needing your password again.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>What To Do Right Now</h2>
+  <ul>
+    <li>Go into your browser settings and <strong>delete all saved payment methods</strong>.</li>
+    <li>Revoke any suspicious sessions on your Odin account and any linked accounts.</li>
+    <li>Change your Odin password and enable <strong>two-factor authentication</strong> if it's available.</li>
+    <li>Contact your bank and ask them to <strong>flag your account</strong> for any unusual activity.</li>
+    <li>Check your email for password-reset attempts or unknown forwards.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>Better Alternatives</h2>
+  <ul>
+    <li><strong>Use your bank's official app</strong> for payments instead of browser checkout where possible.</li>
+    <li><strong>Use a dedicated password manager</strong> with a strong master password and 2FA — not the one built into your browser.</li>
+    <li><strong>Use virtual card numbers</strong> if your bank offers them. These can be cancelled without affecting your main card.</li>
+    <li><strong>Check URLs before entering details</strong> — make sure it's your bank's real site, not a phishing clone.</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h2>Bottom Line</h2>
+  <p>Convenience is the attacker's entry point. If a browser prompts you to save bank details, treat it as a security warning, not a helpful feature. The few seconds of typing are worth the protection.</p>
+</div>
+</div>
+
+<footer>
+  Built by CloudHermes for Jason Harvey • Security Advice • 2026
+</footer>
+</body>
+</html>
