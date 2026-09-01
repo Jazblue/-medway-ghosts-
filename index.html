@@ -47,7 +47,7 @@
   .toc a:hover { color:#ff8a8a; }
 
   #ghostCanvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
-  .vignette { position:fixed; inset:0; pointer-events:none; z-index:1; background:radial-gradient(ellipse at center, transparent 55%, #000000 100%); opacity:.65; }
+  .vignette { position:fixed; inset:0; pointer-events:none; z-index:1; background:radial-gradient(ellipse at center, transparent 55%, #000000 100%); opacity:.7; }
 
   .sound-toggle { position:fixed; bottom:16px; right:16px; z-index:20; background:#12141d; border:1px solid #22253a; color:#ff8a8a; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700; font-family: inherit; }
   .sound-toggle:hover { background:#1a1d2a; }
@@ -233,7 +233,7 @@
 
 <div class="volume-wrap" id="volumeWrap">
   <span style="color:#ff8a8a;font-weight:700;">🔊</span>
-  <input type="range" id="volume" min="0" max="100" value="18">
+  <input type="range" id="volume" min="0" max="100" value="30">
 </div>
 <button class="sound-toggle" id="soundToggle">🔇 Sound Off</button>
 
@@ -248,6 +248,7 @@
   let whisperTimeout = null;
   let footstepTimeout = null;
   let creakTimeout = null;
+  let bellTimeout = null;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -278,7 +279,7 @@
       ctx.globalAlpha = this.opacity;
       ctx.fillStyle = '#e8e8ff';
       ctx.shadowColor = '#ff4d4d';
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = 22;
       ctx.translate(this.x, this.y);
       ctx.beginPath();
       ctx.arc(0, 0, this.size, Math.PI, 0);
@@ -307,7 +308,7 @@
     stopAudio();
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.018;
+    masterGain.gain.value = 0.022;
     masterGain.connect(audioCtx.destination);
 
     const bufferSize = audioCtx.sampleRate * 4;
@@ -319,26 +320,58 @@
     wind.loop = true;
     const windFilter = audioCtx.createBiquadFilter();
     windFilter.type = 'lowpass';
-    windFilter.frequency.value = 140;
+    windFilter.frequency.value = 150;
     const windGain = audioCtx.createGain();
-    windGain.gain.value = 0.45;
+    windGain.gain.value = 0.5;
     wind.connect(windFilter);
     windFilter.connect(windGain);
     windGain.connect(masterGain);
     wind.start();
     drones.push(wind);
 
-    [55, 110, 164.81].forEach((freq, idx) => {
-      const osc = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      osc.type = idx === 0 ? 'sine' : 'triangle';
-      osc.frequency.value = freq;
-      g.gain.value = 0.22 / (idx + 1);
-      osc.connect(g);
-      g.connect(masterGain);
-      osc.start();
-      drones.push(osc);
-    });
+    // Deep spooky root
+    const root = audioCtx.createOscillator();
+    const rootGain = audioCtx.createGain();
+    root.type = 'sine';
+    root.frequency.value = 41.20;
+    rootGain.gain.value = 0.28;
+    root.connect(rootGain);
+    rootGain.connect(masterGain);
+    root.start();
+    drones.push(root);
+
+    // Minor third tension
+    const mid = audioCtx.createOscillator();
+    const midGain = audioCtx.createGain();
+    mid.type = 'triangle';
+    mid.frequency.value = 155.56;
+    midGain.gain.value = 0.18;
+    mid.connect(midGain);
+    midGain.connect(masterGain);
+    mid.start();
+    drones.push(mid);
+
+    // High shimmer
+    const high = audioCtx.createOscillator();
+    const highGain = audioCtx.createGain();
+    high.type = 'sine';
+    high.frequency.value = 311.13;
+    highGain.gain.value = 0.08;
+    high.connect(highGain);
+    highGain.connect(masterGain);
+    high.start();
+    drones.push(high);
+
+    // Slow LFO on volume for movement
+    const lfo = audioCtx.createOscillator();
+    const lfoGain = audioCtx.createGain();
+    lfo.type = 'sine';
+    lfo.frequency.value = 0.08;
+    lfoGain.gain.value = 0.008;
+    lfo.connect(lfoGain);
+    lfoGain.connect(masterGain.gain);
+    lfo.start();
+    drones.push(lfo);
   }
 
   function playWhisper() {
@@ -411,6 +444,24 @@
     src.start(t);
   }
 
+  function playBell() {
+    if (!audioCtx || !isPlaying) return;
+    const t = audioCtx.currentTime;
+    const freqs = [220, 277.18, 329.63];
+    freqs.forEach((freq, idx) => {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      g.gain.setValueAtTime(0.22, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 1.6 + idx * 0.3);
+      osc.connect(g);
+      g.connect(masterGain);
+      osc.start(t);
+      osc.stop(t + 2.2);
+    });
+  }
+
   function scheduleWhispers() {
     if (whisperTimeout) clearTimeout(whisperTimeout);
     whisperTimeout = setTimeout(() => {
@@ -441,12 +492,23 @@
     }, delay);
   }
 
+  function scheduleBells() {
+    if (bellTimeout) clearTimeout(bellTimeout);
+    const delay = 35000 + Math.random() * 45000;
+    bellTimeout = setTimeout(() => {
+      if (!isPlaying) return;
+      playBell();
+      scheduleBells();
+    }, delay);
+  }
+
   function stopAudio() {
     drones.forEach(d => { try { d.stop(); } catch(e) {} });
     drones = [];
     if (whisperTimeout) clearTimeout(whisperTimeout);
     if (footstepTimeout) clearTimeout(footstepTimeout);
     if (creakTimeout) clearTimeout(creakTimeout);
+    if (bellTimeout) clearTimeout(bellTimeout);
   }
 
   document.getElementById('soundToggle').addEventListener('click', () => {
@@ -457,6 +519,7 @@
       scheduleWhispers();
       scheduleFootsteps();
       scheduleCreaks();
+      scheduleBells();
       volWrap.style.display = 'flex';
       btn.textContent = '🔊 Sound On';
       isPlaying = true;
