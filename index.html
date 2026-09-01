@@ -247,6 +247,7 @@
   let drones = [];
   let whisperInterval = null;
   let footstepTimeout = null;
+  let creakTimeout = null;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -309,7 +310,6 @@
     masterGain.gain.value = 0.025;
     masterGain.connect(audioCtx.destination);
 
-    // Deep wind drone
     const bufferSize = audioCtx.sampleRate * 4;
     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
     const data = buffer.getChannelData(0);
@@ -328,7 +328,6 @@
     wind.start();
     drones.push(wind);
 
-    // Tones
     [55, 110, 164.81, 196.00].forEach((freq, idx) => {
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
@@ -384,6 +383,34 @@
     });
   }
 
+  function playCreak() {
+    if (!audioCtx || !isPlaying) return;
+    const t = audioCtx.currentTime;
+    const duration = 0.6 + Math.random() * 1.4;
+    const bufferSize = Math.floor(audioCtx.sampleRate * duration);
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      const t2 = i / audioCtx.sampleRate;
+      const env = Math.sin((t2 / duration) * Math.PI);
+      const tone = Math.sin(2 * Math.PI * (220 + Math.sin(t2 * 3.5) * 70) * t2);
+      const noise = (Math.random() * 2 - 1) * 0.5;
+      data[i] = (tone * 0.45 + noise * 0.55) * env * 0.5;
+    }
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 900 + Math.random() * 900;
+    filter.Q.value = 4 + Math.random() * 6;
+    const g = audioCtx.createGain();
+    g.gain.value = 0.55;
+    src.connect(filter);
+    filter.connect(g);
+    g.connect(masterGain);
+    src.start(t);
+  }
+
   function scheduleWhispers() {
     if (whisperInterval) clearInterval(whisperInterval);
     whisperInterval = setInterval(() => {
@@ -403,11 +430,22 @@
     }, delay);
   }
 
+  function scheduleCreaks() {
+    if (creakTimeout) clearTimeout(creakTimeout);
+    const delay = 22000 + Math.random() * 30000;
+    creakTimeout = setTimeout(() => {
+      if (!isPlaying) return;
+      playCreak();
+      scheduleCreaks();
+    }, delay);
+  }
+
   function stopAudio() {
     drones.forEach(d => { try { d.stop(); } catch(e) {} });
     drones = [];
     if (whisperInterval) clearInterval(whisperInterval);
     if (footstepTimeout) clearTimeout(footstepTimeout);
+    if (creakTimeout) clearTimeout(creakTimeout);
   }
 
   document.getElementById('soundToggle').addEventListener('click', () => {
@@ -417,6 +455,7 @@
       createDrone();
       scheduleWhispers();
       scheduleFootsteps();
+      scheduleCreaks();
       volWrap.style.display = 'flex';
       btn.textContent = '🔊 Sound On';
       isPlaying = true;
