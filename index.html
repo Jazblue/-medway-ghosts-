@@ -233,7 +233,7 @@
 
 <div class="volume-wrap" id="volumeWrap">
   <span style="color:#ff8a8a;font-weight:700;">🔊</span>
-  <input type="range" id="volume" min="0" max="100" value="25">
+  <input type="range" id="volume" min="0" max="100" value="18">
 </div>
 <button class="sound-toggle" id="soundToggle">🔇 Sound Off</button>
 
@@ -245,7 +245,7 @@
   let masterGain = null;
   let isPlaying = false;
   let drones = [];
-  let whisperInterval = null;
+  let whisperTimeout = null;
   let footstepTimeout = null;
   let creakTimeout = null;
 
@@ -262,15 +262,15 @@
       this.x = Math.random() * canvas.width;
       this.y = canvas.height + 120;
       this.size = 16 + Math.random() * 34;
-      this.speed = 0.2 + Math.random() * 0.55;
-      this.opacity = 0.06 + Math.random() * 0.16;
+      this.speed = 0.18 + Math.random() * 0.45;
+      this.opacity = 0.05 + Math.random() * 0.13;
       this.wobble = Math.random() * Math.PI * 2;
-      this.wobbleSpeed = 0.012 + Math.random() * 0.022;
+      this.wobbleSpeed = 0.01 + Math.random() * 0.018;
     }
     update() {
       this.y -= this.speed;
       this.wobble += this.wobbleSpeed;
-      this.x += Math.sin(this.wobble) * 0.7;
+      this.x += Math.sin(this.wobble) * 0.6;
       if (this.y < -150) this.reset();
     }
     draw() {
@@ -278,7 +278,7 @@
       ctx.globalAlpha = this.opacity;
       ctx.fillStyle = '#e8e8ff';
       ctx.shadowColor = '#ff4d4d';
-      ctx.shadowBlur = 22;
+      ctx.shadowBlur = 18;
       ctx.translate(this.x, this.y);
       ctx.beginPath();
       ctx.arc(0, 0, this.size, Math.PI, 0);
@@ -290,7 +290,7 @@
     }
   }
 
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 14; i++) {
     const g = new Ghost();
     g.y = Math.random() * canvas.height;
     ghosts.push(g);
@@ -307,7 +307,7 @@
     stopAudio();
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.025;
+    masterGain.gain.value = 0.018;
     masterGain.connect(audioCtx.destination);
 
     const bufferSize = audioCtx.sampleRate * 4;
@@ -319,21 +319,21 @@
     wind.loop = true;
     const windFilter = audioCtx.createBiquadFilter();
     windFilter.type = 'lowpass';
-    windFilter.frequency.value = 180;
+    windFilter.frequency.value = 140;
     const windGain = audioCtx.createGain();
-    windGain.gain.value = 0.6;
+    windGain.gain.value = 0.45;
     wind.connect(windFilter);
     windFilter.connect(windGain);
     windGain.connect(masterGain);
     wind.start();
     drones.push(wind);
 
-    [55, 110, 164.81, 196.00].forEach((freq, idx) => {
+    [55, 110, 164.81].forEach((freq, idx) => {
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       osc.type = idx === 0 ? 'sine' : 'triangle';
       osc.frequency.value = freq;
-      g.gain.value = 0.35 / (idx + 1);
+      g.gain.value = 0.22 / (idx + 1);
       osc.connect(g);
       g.connect(masterGain);
       osc.start();
@@ -343,22 +343,22 @@
 
   function playWhisper() {
     if (!audioCtx || !isPlaying) return;
-    const bufferSize = audioCtx.sampleRate * 1.5;
+    const bufferSize = audioCtx.sampleRate * 1.2;
     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
       const t = i / audioCtx.sampleRate;
-      const env = Math.exp(-t * 1.8);
-      data[i] = (Math.random() * 2 - 1) * env * 0.25;
+      const env = Math.exp(-t * 2.2);
+      data[i] = (Math.random() * 2 - 1) * env * 0.2;
     }
     const src = audioCtx.createBufferSource();
     src.buffer = buffer;
     const filter = audioCtx.createBiquadFilter();
     filter.type = 'bandpass';
-    filter.frequency.value = 1200 + Math.random() * 1400;
-    filter.Q.value = 6 + Math.random() * 8;
+    filter.frequency.value = 1100 + Math.random() * 1200;
+    filter.Q.value = 5 + Math.random() * 6;
     const g = audioCtx.createGain();
-    g.gain.value = 0.35;
+    g.gain.value = 0.28;
     src.connect(filter);
     filter.connect(g);
     g.connect(masterGain);
@@ -368,43 +368,43 @@
   function playFootstep() {
     if (!audioCtx || !isPlaying) return;
     const t = audioCtx.currentTime;
-    [0, 0.18, 0.36, 0.54].forEach(offset => {
+    [0, 0.2, 0.4, 0.6].forEach(offset => {
       const osc = audioCtx.createOscillator();
       const g = audioCtx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(90 + Math.random() * 60, t + offset);
-      osc.frequency.exponentialRampToValueAtTime(40, t + offset + 0.12);
-      g.gain.setValueAtTime(0.35, t + offset);
-      g.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.12);
+      osc.frequency.setValueAtTime(80 + Math.random() * 50, t + offset);
+      osc.frequency.exponentialRampToValueAtTime(38, t + offset + 0.14);
+      g.gain.setValueAtTime(0.28, t + offset);
+      g.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.14);
       osc.connect(g);
       g.connect(masterGain);
       osc.start(t + offset);
-      osc.stop(t + offset + 0.12);
+      osc.stop(t + offset + 0.14);
     });
   }
 
   function playCreak() {
     if (!audioCtx || !isPlaying) return;
     const t = audioCtx.currentTime;
-    const duration = 0.6 + Math.random() * 1.4;
+    const duration = 0.5 + Math.random() * 1.2;
     const bufferSize = Math.floor(audioCtx.sampleRate * duration);
     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
       const t2 = i / audioCtx.sampleRate;
       const env = Math.sin((t2 / duration) * Math.PI);
-      const tone = Math.sin(2 * Math.PI * (220 + Math.sin(t2 * 3.5) * 70) * t2);
-      const noise = (Math.random() * 2 - 1) * 0.5;
-      data[i] = (tone * 0.45 + noise * 0.55) * env * 0.5;
+      const tone = Math.sin(2 * Math.PI * (200 + Math.sin(t2 * 3.2) * 60) * t2);
+      const noise = (Math.random() * 2 - 1) * 0.45;
+      data[i] = (tone * 0.4 + noise * 0.6) * env * 0.4;
     }
     const src = audioCtx.createBufferSource();
     src.buffer = buffer;
     const filter = audioCtx.createBiquadFilter();
     filter.type = 'bandpass';
-    filter.frequency.value = 900 + Math.random() * 900;
-    filter.Q.value = 4 + Math.random() * 6;
+    filter.frequency.value = 850 + Math.random() * 850;
+    filter.Q.value = 4 + Math.random() * 5;
     const g = audioCtx.createGain();
-    g.gain.value = 0.55;
+    g.gain.value = 0.45;
     src.connect(filter);
     filter.connect(g);
     g.connect(masterGain);
@@ -412,17 +412,18 @@
   }
 
   function scheduleWhispers() {
-    if (whisperInterval) clearInterval(whisperInterval);
-    whisperInterval = setInterval(() => {
+    if (whisperTimeout) clearTimeout(whisperTimeout);
+    whisperTimeout = setTimeout(() => {
       if (!isPlaying) return;
       playWhisper();
-      setTimeout(() => playWhisper(), 800 + Math.random() * 1600);
-    }, 7000 + Math.random() * 12000);
+      setTimeout(() => playWhisper(), 900 + Math.random() * 1400);
+      scheduleWhispers();
+    }, 8000 + Math.random() * 14000);
   }
 
   function scheduleFootsteps() {
     if (footstepTimeout) clearTimeout(footstepTimeout);
-    const delay = 18000 + Math.random() * 26000;
+    const delay = 20000 + Math.random() * 28000;
     footstepTimeout = setTimeout(() => {
       if (!isPlaying) return;
       playFootstep();
@@ -432,7 +433,7 @@
 
   function scheduleCreaks() {
     if (creakTimeout) clearTimeout(creakTimeout);
-    const delay = 22000 + Math.random() * 30000;
+    const delay = 25000 + Math.random() * 32000;
     creakTimeout = setTimeout(() => {
       if (!isPlaying) return;
       playCreak();
@@ -443,7 +444,7 @@
   function stopAudio() {
     drones.forEach(d => { try { d.stop(); } catch(e) {} });
     drones = [];
-    if (whisperInterval) clearInterval(whisperInterval);
+    if (whisperTimeout) clearTimeout(whisperTimeout);
     if (footstepTimeout) clearTimeout(footstepTimeout);
     if (creakTimeout) clearTimeout(creakTimeout);
   }
