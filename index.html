@@ -47,10 +47,13 @@
   .toc a:hover { color:#ff8a8a; }
 
   #ghostCanvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
-  .vignette { position:fixed; inset:0; pointer-events:none; z-index:1; background:radial-gradient(ellipse at center, transparent 55%, #000000 100%); opacity:.55; }
+  .vignette { position:fixed; inset:0; pointer-events:none; z-index:1; background:radial-gradient(ellipse at center, transparent 55%, #000000 100%); opacity:.65; }
 
-  .sound-toggle { position:fixed; bottom:16px; right:16px; z-index:20; background:#12141d; border:1px solid #22253a; color:#ff8a8a; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700; }
+  .sound-toggle { position:fixed; bottom:16px; right:16px; z-index:20; background:#12141d; border:1px solid #22253a; color:#ff8a8a; padding:10px 14px; border-radius:10px; cursor:pointer; font-weight:700; font-family: inherit; }
   .sound-toggle:hover { background:#1a1d2a; }
+
+  .volume-wrap { position:fixed; bottom:60px; right:16px; z-index:20; background:#12141d; border:1px solid #22253a; padding:10px 14px; border-radius:10px; display:none; gap:8px; align-items:center; }
+  .volume-wrap input { width:120px; accent-color:#ff8a8a; }
 
   @media (max-width: 640px) {
     .story { padding:22px; }
@@ -228,6 +231,10 @@
   👻 Built by CloudHermes for Jason Harvey • Medway Ghosts • 2026 💀
 </footer>
 
+<div class="volume-wrap" id="volumeWrap">
+  <span style="color:#ff8a8a;font-weight:700;">🔊</span>
+  <input type="range" id="volume" min="0" max="100" value="25">
+</div>
 <button class="sound-toggle" id="soundToggle">🔇 Sound Off</button>
 
 <script>
@@ -235,9 +242,11 @@
   const ctx = canvas.getContext('2d');
   let ghosts = [];
   let audioCtx = null;
+  let masterGain = null;
   let isPlaying = false;
-  let gainNode = null;
-  let oscillators = [];
+  let drones = [];
+  let whisperInterval = null;
+  let footstepTimeout = null;
 
   function resize() {
     canvas.width = window.innerWidth;
@@ -247,30 +256,28 @@
   resize();
 
   class Ghost {
-    constructor() {
-      this.reset();
-    }
+    constructor() { this.reset(); }
     reset() {
       this.x = Math.random() * canvas.width;
       this.y = canvas.height + 120;
-      this.size = 18 + Math.random() * 32;
-      this.speed = 0.25 + Math.random() * 0.6;
-      this.opacity = 0.08 + Math.random() * 0.18;
+      this.size = 16 + Math.random() * 34;
+      this.speed = 0.2 + Math.random() * 0.55;
+      this.opacity = 0.06 + Math.random() * 0.16;
       this.wobble = Math.random() * Math.PI * 2;
-      this.wobbleSpeed = 0.015 + Math.random() * 0.025;
+      this.wobbleSpeed = 0.012 + Math.random() * 0.022;
     }
     update() {
       this.y -= this.speed;
       this.wobble += this.wobbleSpeed;
-      this.x += Math.sin(this.wobble) * 0.6;
-      if (this.y < -140) this.reset();
+      this.x += Math.sin(this.wobble) * 0.7;
+      if (this.y < -150) this.reset();
     }
     draw() {
       ctx.save();
       ctx.globalAlpha = this.opacity;
       ctx.fillStyle = '#e8e8ff';
       ctx.shadowColor = '#ff4d4d';
-      ctx.shadowBlur = 18;
+      ctx.shadowBlur = 22;
       ctx.translate(this.x, this.y);
       ctx.beginPath();
       ctx.arc(0, 0, this.size, Math.PI, 0);
@@ -282,7 +289,7 @@
     }
   }
 
-  for (let i = 0; i < 14; i++) {
+  for (let i = 0; i < 16; i++) {
     const g = new Ghost();
     g.y = Math.random() * canvas.height;
     ghosts.push(g);
@@ -295,42 +302,135 @@
   }
   animate();
 
+  function createDrone() {
+    stopAudio();
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.025;
+    masterGain.connect(audioCtx.destination);
+
+    // Deep wind drone
+    const bufferSize = audioCtx.sampleRate * 4;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * 0.5;
+    const wind = audioCtx.createBufferSource();
+    wind.buffer = buffer;
+    wind.loop = true;
+    const windFilter = audioCtx.createBiquadFilter();
+    windFilter.type = 'lowpass';
+    windFilter.frequency.value = 180;
+    const windGain = audioCtx.createGain();
+    windGain.gain.value = 0.6;
+    wind.connect(windFilter);
+    windFilter.connect(windGain);
+    windGain.connect(masterGain);
+    wind.start();
+    drones.push(wind);
+
+    // Tones
+    [55, 110, 164.81, 196.00].forEach((freq, idx) => {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = idx === 0 ? 'sine' : 'triangle';
+      osc.frequency.value = freq;
+      g.gain.value = 0.35 / (idx + 1);
+      osc.connect(g);
+      g.connect(masterGain);
+      osc.start();
+      drones.push(osc);
+    });
+  }
+
+  function playWhisper() {
+    if (!audioCtx || !isPlaying) return;
+    const bufferSize = audioCtx.sampleRate * 1.5;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      const t = i / audioCtx.sampleRate;
+      const env = Math.exp(-t * 1.8);
+      data[i] = (Math.random() * 2 - 1) * env * 0.25;
+    }
+    const src = audioCtx.createBufferSource();
+    src.buffer = buffer;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 1200 + Math.random() * 1400;
+    filter.Q.value = 6 + Math.random() * 8;
+    const g = audioCtx.createGain();
+    g.gain.value = 0.35;
+    src.connect(filter);
+    filter.connect(g);
+    g.connect(masterGain);
+    src.start();
+  }
+
+  function playFootstep() {
+    if (!audioCtx || !isPlaying) return;
+    const t = audioCtx.currentTime;
+    [0, 0.18, 0.36, 0.54].forEach(offset => {
+      const osc = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(90 + Math.random() * 60, t + offset);
+      osc.frequency.exponentialRampToValueAtTime(40, t + offset + 0.12);
+      g.gain.setValueAtTime(0.35, t + offset);
+      g.gain.exponentialRampToValueAtTime(0.001, t + offset + 0.12);
+      osc.connect(g);
+      g.connect(masterGain);
+      osc.start(t + offset);
+      osc.stop(t + offset + 0.12);
+    });
+  }
+
+  function scheduleWhispers() {
+    if (whisperInterval) clearInterval(whisperInterval);
+    whisperInterval = setInterval(() => {
+      if (!isPlaying) return;
+      playWhisper();
+      setTimeout(() => playWhisper(), 800 + Math.random() * 1600);
+    }, 7000 + Math.random() * 12000);
+  }
+
+  function scheduleFootsteps() {
+    if (footstepTimeout) clearTimeout(footstepTimeout);
+    const delay = 18000 + Math.random() * 26000;
+    footstepTimeout = setTimeout(() => {
+      if (!isPlaying) return;
+      playFootstep();
+      scheduleFootsteps();
+    }, delay);
+  }
+
+  function stopAudio() {
+    drones.forEach(d => { try { d.stop(); } catch(e) {} });
+    drones = [];
+    if (whisperInterval) clearInterval(whisperInterval);
+    if (footstepTimeout) clearTimeout(footstepTimeout);
+  }
+
   document.getElementById('soundToggle').addEventListener('click', () => {
     const btn = document.getElementById('soundToggle');
+    const volWrap = document.getElementById('volumeWrap');
     if (!isPlaying) {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      gainNode = audioCtx.createGain();
-      gainNode.gain.value = 0.03;
-      gainNode.connect(audioCtx.destination);
-      startDrone();
+      createDrone();
+      scheduleWhispers();
+      scheduleFootsteps();
+      volWrap.style.display = 'flex';
       btn.textContent = '🔊 Sound On';
       isPlaying = true;
     } else {
-      stopDrone();
+      stopAudio();
+      volWrap.style.display = 'none';
       btn.textContent = '🔇 Sound Off';
       isPlaying = false;
     }
   });
 
-  function startDrone() {
-    stopDrone();
-    const base = audioCtx.sampleRate;
-    [55, 110, 165].forEach((freq, i) => {
-      const osc = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      osc.type = i === 0 ? 'sine' : 'triangle';
-      osc.frequency.value = freq;
-      g.gain.value = 0.4 / (i + 1);
-      osc.connect(g);
-      g.connect(gainNode);
-      osc.start();
-      oscillators.push({osc, gain: g});
-    });
-  }
-  function stopDrone() {
-    oscillators.forEach(o => { try { o.osc.stop(); } catch(e) {} });
-    oscillators = [];
-  }
+  document.getElementById('volume').addEventListener('input', (e) => {
+    if (masterGain) masterGain.gain.value = e.target.value / 1000;
+  });
 </script>
 </body>
 </html>
